@@ -30,6 +30,16 @@ La primera vez se crea la base de datos `server/data/tienda.db` con productos de
 | `npm test` | Pruebas de la API (Vitest + Supertest) |
 | `npm run typecheck` | Revisa los tipos de servidor y cliente |
 
+## Producción y despliegue
+
+```bash
+npm run build   # compila el frontend en client/dist
+npm start       # un solo servidor: API en /api y la web en el resto de rutas
+```
+
+En Render se despliega con el blueprint [`render.yaml`](render.yaml) (New → Blueprint → este repositorio).
+En el plan gratuito el disco no es persistente: la base de datos vuelve a los datos de ejemplo en cada reinicio.
+
 ## Estructura
 
 ```

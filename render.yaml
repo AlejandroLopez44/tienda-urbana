@@ -1,0 +1,20 @@
+# Blueprint de Render: describe cómo construir y arrancar la tienda.
+# https://render.com/docs/blueprint-spec
+services:
+  - type: web
+    name: tienda-urbana
+    runtime: node
+    plan: free
+    # --include=dev instala también Vite y TypeScript, necesarios para compilar el frontend.
+    buildCommand: npm ci --include=dev && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/productos
+    envVars:
+      - key: NODE_VERSION
+        value: "24"
+      - key: JWT_SECRET
+        generateValue: true # Render genera un secreto aleatorio
+      - key: ADMIN_EMAIL
+        sync: false # Render te lo pedirá al crear el servicio
+      - key: ADMIN_PASSWORD
+        sync: false

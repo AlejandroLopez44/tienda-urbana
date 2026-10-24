@@ -1,4 +1,4 @@
-import { mkdirSync } from 'node:fs';
+import { existsSync, mkdirSync } from 'node:fs';
 import path from 'node:path';
 import { crearApp } from './app';
 import { abrirDb, sembrarDatos } from './db';
@@ -19,7 +19,11 @@ mkdirSync('data', { recursive: true });
 const db = abrirDb(path.join('data', 'tienda.db'));
 sembrarDatos(db, { nombre: 'Administrador', email: ADMIN_EMAIL, password: ADMIN_PASSWORD });
 
-const puerto = Number(process.env.PUERTO ?? 3001);
-crearApp(db, { jwtSecret: JWT_SECRET }).listen(puerto, () => {
+// Si el frontend ya está compilado (npm run build), este mismo servidor lo sirve.
+const carpetaWeb = path.resolve(import.meta.dirname, '../../client/dist');
+
+// Render (y la mayoría de servicios) indican el puerto en la variable PORT.
+const puerto = Number(process.env.PORT ?? process.env.PUERTO ?? 3001);
+crearApp(db, { jwtSecret: JWT_SECRET, carpetaWeb: existsSync(carpetaWeb) ? carpetaWeb : undefined }).listen(puerto, () => {
   console.log(`API lista en http://localhost:${puerto}`);
 });

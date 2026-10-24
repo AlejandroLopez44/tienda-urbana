@@ -1,4 +1,5 @@
 import express, { type ErrorRequestHandler } from 'express';
+import path from 'node:path';
 import type { DatabaseSync } from 'node:sqlite';
 import { ErrorHttp } from './errores';
 import { rutasAuth } from './rutas/auth';
@@ -6,6 +7,8 @@ import { rutasProductos } from './rutas/productos';
 
 interface Config {
   jwtSecret: string;
+  /** Carpeta con el frontend compilado (client/dist). Solo se usa en producción. */
+  carpetaWeb?: string;
 }
 
 const manejarErrores: ErrorRequestHandler = (err, _req, res, _next) => {
@@ -31,6 +34,15 @@ export function crearApp(db: DatabaseSync, config: Config) {
   app.use('/api', (_req, res) => {
     res.status(404).json({ error: 'Ruta no encontrada' });
   });
+
+  if (config.carpetaWeb) {
+    const carpeta = config.carpetaWeb;
+    app.use(express.static(carpeta));
+    // Cualquier otra ruta (/admin, /producto/3…) la resuelve React Router en el navegador.
+    app.use((_req, res) => {
+      res.sendFile(path.join(carpeta, 'index.html'));
+    });
+  }
 
   app.use(manejarErrores);
   return app;
