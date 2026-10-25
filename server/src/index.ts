@@ -22,8 +22,8 @@ sembrarDatos(db, { nombre: 'Administrador', email: ADMIN_EMAIL, password: ADMIN_
 // Si el frontend ya está compilado (npm run build), este mismo servidor lo sirve.
 const carpetaWeb = path.resolve(import.meta.dirname, '../../client/dist');
 
-// Render (y la mayoría de servicios) indican el puerto en la variable PORT.
-const puerto = Number(process.env.PORT ?? process.env.PUERTO ?? 3001);
+// En local manda PUERTO (de server/.env); en Render no hay .env y se usa el PORT que asigna el servicio.
+const puerto = Number(process.env.PUERTO ?? process.env.PORT ?? 3001);
 crearApp(db, { jwtSecret: JWT_SECRET, carpetaWeb: existsSync(carpetaWeb) ? carpetaWeb : undefined }).listen(puerto, () => {
   console.log(`API lista en http://localhost:${puerto}`);
 });
