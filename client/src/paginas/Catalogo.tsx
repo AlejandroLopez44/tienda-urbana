@@ -1,8 +1,8 @@
 import { useEffect, useState, type FormEvent } from 'react';
-import { Link, useSearchParams } from 'react-router';
+import { useSearchParams } from 'react-router';
 import { api } from '../api';
-import { ImagenProducto } from '../componentes/ImagenProducto';
-import { CATEGORIAS, NOMBRE_CATEGORIA, formatearPrecio, type Categoria, type Producto } from '../tipos';
+import { TarjetaEsqueleto, TarjetaProducto } from '../componentes/TarjetaProducto';
+import { CATEGORIAS, NOMBRE_CATEGORIA, type Categoria, type Producto } from '../tipos';
 
 export function Catalogo() {
   const [params, setParams] = useSearchParams();
@@ -17,6 +17,7 @@ export function Catalogo() {
   useEffect(() => {
     let vigente = true;
     setError('');
+    setProductos(null);
     api.productos
       .listar({ categoria, q: q || undefined })
       .then((lista) => vigente && setProductos(lista))
@@ -42,26 +43,52 @@ export function Catalogo() {
     cambiarFiltro({ q: busqueda.trim() || undefined });
   }
 
+  const descripcionFiltro = [
+    categoria && `en ${NOMBRE_CATEGORIA[categoria]}`,
+    q && `para “${q}”`,
+  ]
+    .filter(Boolean)
+    .join(' ');
+
   return (
     <>
       <section className="hero">
-        <p className="hero-etiqueta">Nueva colección · Otoño 2026</p>
-        <h1>Hecho para la calle.</h1>
-        <p>Hoodies, cargos y básicos con actitud. Para ellos, para ellas, para todos.</p>
+        <div className="hero-texto">
+          <p className="sobretitulo sobretitulo-acento">Nueva colección · Otoño 2026</p>
+          <h1>Hecho para la calle.</h1>
+          <p>Hoodies, cargos y básicos con actitud. Para ellos, para ellas, para todos.</p>
+        </div>
+        <div className="hero-prendas" aria-hidden="true">
+          <img src="/productos/bomber-asfalto.svg" alt="" width={400} height={500} />
+          <img src="/productos/hoodie-concreto.svg" alt="" width={400} height={500} />
+        </div>
       </section>
 
-      <div className="filtros">
-        <div className="chips">
-          <button className={!categoria ? 'chip activo' : 'chip'} onClick={() => cambiarFiltro({ categoria: undefined })}>
+      <div className="barra-filtros">
+        <div className="chips chips-desplazables" role="group" aria-label="Filtrar por categoría">
+          <button
+            className={!categoria ? 'chip activo' : 'chip'}
+            aria-pressed={!categoria}
+            onClick={() => cambiarFiltro({ categoria: undefined })}
+          >
             Todo
           </button>
           {CATEGORIAS.map((c) => (
-            <button key={c} className={categoria === c ? 'chip activo' : 'chip'} onClick={() => cambiarFiltro({ categoria: c })}>
+            <button
+              key={c}
+              className={categoria === c ? 'chip activo' : 'chip'}
+              aria-pressed={categoria === c}
+              onClick={() => cambiarFiltro({ categoria: c })}
+            >
               {NOMBRE_CATEGORIA[c]}
             </button>
           ))}
         </div>
-        <form className="buscador" onSubmit={buscar}>
+        <form className="buscador" role="search" onSubmit={buscar}>
+          <svg className="icono-buscar" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="11" cy="11" r="7" />
+            <path d="m20 20-4-4" />
+          </svg>
           <input
             type="search"
             placeholder="Buscar hoodie, cargo, gorra…"
@@ -69,28 +96,32 @@ export function Catalogo() {
             onChange={(e) => setBusqueda(e.target.value)}
             aria-label="Buscar productos"
           />
-          <button className="boton">Buscar</button>
+          <button className="boton boton-chico">Buscar</button>
         </form>
       </div>
 
       {error && <p className="alerta">{error}</p>}
-      {!productos && !error && <p className="estado">Cargando productos…</p>}
-      {productos?.length === 0 && <p className="estado">No encontramos productos con esos filtros.</p>}
+
+      {productos && (
+        <p className="conteo">
+          {productos.length} {productos.length === 1 ? 'producto' : 'productos'} {descripcionFiltro}
+          {(categoria || q) && (
+            <button className="boton-texto" onClick={() => cambiarFiltro({ categoria: undefined, q: undefined })}>
+              Limpiar filtros
+            </button>
+          )}
+        </p>
+      )}
+
+      {productos?.length === 0 && (
+        <div className="vacio">
+          <p>No encontramos productos con esos filtros.</p>
+        </div>
+      )}
 
       <div className="rejilla">
-        {productos?.map((p) => (
-          <Link key={p.id} to={`/producto/${p.id}`} className="tarjeta">
-            <div className="tarjeta-imagen">
-              <ImagenProducto producto={p} />
-              {p.stock === 0 && <span className="etiqueta-agotado">Agotado</span>}
-            </div>
-            <div className="tarjeta-info">
-              <span className="tarjeta-categoria">{NOMBRE_CATEGORIA[p.categoria]}</span>
-              <h3>{p.nombre}</h3>
-              <span className="precio">{formatearPrecio(p.precioCentavos)}</span>
-            </div>
-          </Link>
-        ))}
+        {!productos && !error && Array.from({ length: 8 }, (_, i) => <TarjetaEsqueleto key={i} />)}
+        {productos?.map((p) => <TarjetaProducto key={p.id} producto={p} />)}
       </div>
     </>
   );

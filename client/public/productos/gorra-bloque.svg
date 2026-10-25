@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500">
+<defs>
+<linearGradient id="f" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2b1213"/><stop offset="1" stop-color="#0f0707"/></linearGradient>
+<radialGradient id="b" cx=".7" cy=".22" r=".65"><stop offset="0" stop-color="#ff5a4f" stop-opacity=".32"/><stop offset="1" stop-color="#ff5a4f" stop-opacity="0"/></radialGradient>
+<pattern id="r" width="24" height="24" patternUnits="userSpaceOnUse" patternTransform="rotate(-45)"><rect width="12" height="24" fill="#fff" fill-opacity=".025"/></pattern>
+<filter id="s" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#000" flood-opacity=".45"/></filter>
+</defs>
+<rect width="400" height="500" fill="url(#f)"/>
+<rect width="400" height="500" fill="url(#r)"/>
+<rect width="400" height="500" fill="url(#b)"/>
+<ellipse cx="200" cy="372" rx="125" ry="12" fill="#000" fill-opacity=".35"/>
+<g transform="translate(0 0)" filter="url(#s)" stroke-linejoin="round" stroke-linecap="round">
+
+<path d="M95 300 C95 195 155 150 222 150 C292 150 335 205 335 300 Z" fill="#b3262b" stroke="#000" stroke-opacity=".35" stroke-width="2"/>
+<path d="M222 152 C200 200 192 250 190 300 M222 152 C262 200 285 250 292 300" stroke="#861b1f" stroke-width="3" fill="none"/>
+<circle cx="150" cy="215" r="4" fill="#861b1f"/><circle cx="300" cy="225" r="4" fill="#861b1f"/>
+<path d="M95 300 C60 302 35 318 28 338 C100 354 190 342 252 304 Z" fill="#861b1f" stroke="#000" stroke-opacity=".35" stroke-width="2"/>
+<path d="M60 324 C110 334 170 328 220 310" stroke="#000" stroke-opacity=".3" stroke-width="2" fill="none"/>
+<circle cx="222" cy="152" r="9" fill="#861b1f" stroke="#000" stroke-opacity=".35" stroke-width="2"/>
+<rect x="198" y="216" width="56" height="56" rx="5" fill="#f1f1f1"/>
+<path d="M208 262 L208 228 L226 228 L226 245 L244 245 L244 262 Z" fill="#b3262b"/>
+</g>
+</svg>

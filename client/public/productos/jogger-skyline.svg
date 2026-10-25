@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500">
+<defs>
+<linearGradient id="f" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#171c2b"/><stop offset="1" stop-color="#0a0c13"/></linearGradient>
+<radialGradient id="b" cx=".7" cy=".22" r=".65"><stop offset="0" stop-color="#6f8cff" stop-opacity=".32"/><stop offset="1" stop-color="#6f8cff" stop-opacity="0"/></radialGradient>
+<pattern id="r" width="24" height="24" patternUnits="userSpaceOnUse" patternTransform="rotate(-45)"><rect width="12" height="24" fill="#fff" fill-opacity=".025"/></pattern>
+<filter id="s" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#000" flood-opacity=".45"/></filter>
+</defs>
+<rect width="400" height="500" fill="url(#f)"/>
+<rect width="400" height="500" fill="url(#r)"/>
+<rect width="400" height="500" fill="url(#b)"/>
+<ellipse cx="200" cy="446" rx="125" ry="12" fill="#000" fill-opacity=".35"/>
+<g transform="translate(0 -20)" filter="url(#s)" stroke-linejoin="round" stroke-linecap="round">
+
+<path d="M118 112 L282 112 L272 418 L216 418 L200 205 L184 418 L128 418 Z" fill="#2f3b57" stroke="#000" stroke-opacity=".35" stroke-width="2"/>
+<path d="M120 82 L280 82 L282 112 L118 112 Z" fill="#222b41" stroke="#000" stroke-opacity=".35" stroke-width="2"/>
+<path d="M192 112 Q188 140 184 152 M208 112 Q212 140 216 152" stroke="#e8e8e8" stroke-width="3" fill="none"/>
+<path d="M124 116 L134 416 M276 116 L266 416" stroke="#e8ebf5" stroke-width="7"/>
+<path d="M136 120 Q154 150 128 170 M264 120 Q246 150 272 170" stroke="#000" stroke-opacity=".35" stroke-width="3" fill="none"/>
+<path d="M128 418 L184 418 L182 448 L132 448 Z M216 418 L272 418 L268 448 L218 448 Z" fill="#222b41" stroke="#000" stroke-opacity=".35" stroke-width="2"/>
+</g>
+</svg>

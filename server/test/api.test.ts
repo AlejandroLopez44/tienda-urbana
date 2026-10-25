@@ -41,6 +41,7 @@ describe('catálogo público', () => {
     const res = await request(app).get('/api/productos').expect(200);
     expect(res.body.length).toBeGreaterThan(0);
     expect(res.body[0]).toHaveProperty('precioCentavos');
+    expect(res.body.every((p: { imagenUrl: string }) => p.imagenUrl.startsWith('/productos/'))).toBe(true);
   });
 
   it('filtra por categoría y por texto', async () => {
@@ -128,5 +129,14 @@ describe('gestión de productos (admin)', () => {
       .expect(400);
     const campos = res.body.detalles.map((d: { campo: string }) => d.campo);
     expect(campos).toEqual(expect.arrayContaining(['precioCentavos', 'categoria']));
+  });
+
+  it('acepta imágenes https o rutas propias, pero no otros esquemas', async () => {
+    const token = await iniciarSesion(ADMIN.email, ADMIN.password);
+    const auth = { Authorization: `Bearer ${token}` };
+    for (const imagenUrl of ['https://ejemplo.com/foto.jpg', '/productos/gorra-bloque.svg']) {
+      await request(app).post('/api/productos').set(auth).send({ ...productoNuevo, imagenUrl }).expect(201);
+    }
+    await request(app).post('/api/productos').set(auth).send({ ...productoNuevo, imagenUrl: 'javascript:alert(1)' }).expect(400);
   });
 });

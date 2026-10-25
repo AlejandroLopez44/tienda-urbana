@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import type { Producto } from '../tipos';
 
-/** Muestra la foto del producto o, si no tiene (o falla), un bloque de color con sus iniciales. */
-export function ImagenProducto({ producto, className = '' }: { producto: Producto; className?: string }) {
+type DatosImagen = Pick<Producto, 'id' | 'nombre' | 'imagenUrl'>;
+
+/** Muestra la imagen del producto o, si no tiene (o falla), un bloque de color con sus iniciales. */
+export function ImagenProducto({ producto, className = '' }: { producto: DatosImagen; className?: string }) {
   const [fallo, setFallo] = useState(false);
 
   if (producto.imagenUrl && !fallo) {
@@ -11,6 +13,10 @@ export function ImagenProducto({ producto, className = '' }: { producto: Product
         className={`imagen-producto ${className}`}
         src={producto.imagenUrl}
         alt={producto.nombre}
+        width={400}
+        height={500}
+        loading="lazy"
+        decoding="async"
         onError={() => setFallo(true)}
       />
     );

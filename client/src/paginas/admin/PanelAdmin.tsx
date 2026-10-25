@@ -68,7 +68,7 @@ export function PanelAdmin() {
       {!productos && !error && <p className="estado">Cargando…</p>}
       {productos && (
         <div className="tabla-contenedor">
-          <table className="tabla">
+          <table className="tabla tabla-adaptable">
             <thead>
               <tr>
                 <th></th>
@@ -82,13 +82,13 @@ export function PanelAdmin() {
             <tbody>
               {visibles.map((p) => (
                 <tr key={p.id}>
-                  <td><ImagenProducto producto={p} className="miniatura" /></td>
-                  <td>
+                  <td className="celda-miniatura"><ImagenProducto producto={p} className="miniatura" /></td>
+                  <td className="celda-nombre">
                     <Link to={`/producto/${p.id}`}>{p.nombre}</Link>
                   </td>
-                  <td>{NOMBRE_CATEGORIA[p.categoria]}</td>
-                  <td>{formatearPrecio(p.precioCentavos)}</td>
-                  <td className={p.stock === 0 ? 'texto-alerta' : ''}>{p.stock}</td>
+                  <td data-etiqueta="Categoría">{NOMBRE_CATEGORIA[p.categoria]}</td>
+                  <td data-etiqueta="Precio">{formatearPrecio(p.precioCentavos)}</td>
+                  <td data-etiqueta="Stock" className={p.stock === 0 ? 'texto-alerta' : ''}>{p.stock}</td>
                   <td className="acciones">
                     <Link to={`/admin/productos/${p.id}/editar`} className="boton boton-chico boton-secundario">
                       Editar

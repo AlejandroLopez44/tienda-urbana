@@ -12,7 +12,13 @@ const esquemaProducto = z.object({
   categoria: z.enum(CATEGORIAS),
   tallas: z.array(z.enum(TALLAS)).default([]),
   stock: z.number().int().min(0).max(100_000),
-  imagenUrl: z.url({ protocol: /^https?$/ }).nullable().default(null),
+  // Una URL externa (https://…) o una imagen propia de la tienda (/productos/archivo.svg).
+  imagenUrl: z
+    .union([z.url({ protocol: /^https?$/ }), z.string().regex(/^\/[\w\-./]+$/)], {
+      error: 'Debe ser una URL http(s) o una ruta que empiece por /',
+    })
+    .nullable()
+    .default(null),
 });
 
 const esquemaFiltros = z.object({

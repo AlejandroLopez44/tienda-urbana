@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500">
+<defs>
+<linearGradient id="f" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#25200f"/><stop offset="1" stop-color="#0e0c07"/></linearGradient>
+<radialGradient id="b" cx=".7" cy=".22" r=".65"><stop offset="0" stop-color="#e0c890" stop-opacity=".32"/><stop offset="1" stop-color="#e0c890" stop-opacity="0"/></radialGradient>
+<pattern id="r" width="24" height="24" patternUnits="userSpaceOnUse" patternTransform="rotate(-45)"><rect width="12" height="24" fill="#fff" fill-opacity=".025"/></pattern>
+<filter id="s" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#000" flood-opacity=".45"/></filter>
+</defs>
+<rect width="400" height="500" fill="url(#f)"/>
+<rect width="400" height="500" fill="url(#r)"/>
+<rect width="400" height="500" fill="url(#b)"/>
+<ellipse cx="200" cy="416" rx="125" ry="12" fill="#000" fill-opacity=".35"/>
+<g transform="translate(0 -21)" filter="url(#s)" stroke-linejoin="round" stroke-linecap="round">
+
+<path d="M123 146 L277 146 L312 418 L88 418 Z" fill="#c9b48a" stroke="#000" stroke-opacity=".35" stroke-width="2"/>
+<path d="M125 118 L275 118 L277 146 L123 146 Z" fill="#2b2b2b" stroke="#000" stroke-opacity=".35" stroke-width="2"/>
+<rect x="185" y="112" width="30" height="40" rx="5" fill="none" stroke="#cfcfcf" stroke-width="5"/>
+<path d="M200 152 L200 418" stroke="#a8956e" stroke-width="2.5"/>
+<rect x="100" y="252" width="58" height="72" rx="4" fill="#a8956e" stroke="#000" stroke-opacity=".35" stroke-width="2"/>
+<rect x="98" y="246" width="62" height="18" rx="3" fill="#c9b48a" stroke="#000" stroke-opacity=".35" stroke-width="2"/>
+<rect x="242" y="252" width="58" height="72" rx="4" fill="#a8956e" stroke="#000" stroke-opacity=".35" stroke-width="2"/>
+<rect x="240" y="246" width="62" height="18" rx="3" fill="#c9b48a" stroke="#000" stroke-opacity=".35" stroke-width="2"/>
+<path d="M93 406 L307 406" stroke="#a8956e" stroke-width="2" stroke-dasharray="7 6"/>
+</g>
+</svg>

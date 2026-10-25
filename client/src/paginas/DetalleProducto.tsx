@@ -20,39 +20,68 @@ export function DetalleProducto() {
   if (error) return <p className="alerta">{error}</p>;
   if (!producto) return <p className="estado">Cargando…</p>;
 
-  const agotado = producto.stock === 0;
+  const { stock } = producto;
+  const estadoStock =
+    stock === 0
+      ? { clase: 'agotado', texto: 'Agotado' }
+      : stock <= 5
+        ? { clase: 'pocas', texto: `Quedan solo ${stock}` }
+        : { clase: '', texto: 'Disponible' };
 
   return (
-    <div className="detalle">
-      <ImagenProducto producto={producto} className="detalle-imagen" />
-      <div className="detalle-info">
-        <Link to={`/?categoria=${producto.categoria}`} className="tarjeta-categoria">
-          {NOMBRE_CATEGORIA[producto.categoria]}
-        </Link>
-        <h1>{producto.nombre}</h1>
-        <p className="precio precio-grande">{formatearPrecio(producto.precioCentavos)}</p>
-        <p className="descripcion">{producto.descripcion}</p>
+    <>
+      <Link to="/" className="volver">← Volver al catálogo</Link>
+      <div className="detalle">
+        <ImagenProducto producto={producto} className="detalle-imagen" />
+        <div className="detalle-info">
+          <Link to={`/?categoria=${producto.categoria}`} className="sobretitulo">
+            {NOMBRE_CATEGORIA[producto.categoria]}
+          </Link>
+          <h1>{producto.nombre}</h1>
+          <p className="precio precio-grande">{formatearPrecio(producto.precioCentavos)}</p>
+          <span className={`pastilla-stock ${estadoStock.clase}`}>{estadoStock.texto}</span>
+          <p className="descripcion">{producto.descripcion}</p>
 
-        <h4>Talla</h4>
-        {producto.tallas.length === 0 ? (
-          <p className="tenue">Talla única</p>
-        ) : (
-          <div className="chips">
-            {producto.tallas.map((t) => (
-              <button key={t} className={talla === t ? 'chip activo' : 'chip'} onClick={() => setTalla(t)}>
-                {t}
-              </button>
-            ))}
+          <div className="bloque-tallas">
+            <h2 className="titulo-seccion">Talla</h2>
+            {producto.tallas.length === 0 ? (
+              <p className="tenue">Talla única</p>
+            ) : (
+              <div className="chips">
+                {producto.tallas.map((t) => (
+                  <button
+                    key={t}
+                    className={talla === t ? 'chip chip-talla activo' : 'chip chip-talla'}
+                    aria-pressed={talla === t}
+                    onClick={() => setTalla(t)}
+                  >
+                    {t}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
-        )}
 
-        <p className={agotado ? 'stock agotado' : 'stock'}>
-          {agotado ? 'Agotado' : producto.stock <= 5 ? `¡Quedan solo ${producto.stock}!` : 'Disponible'}
-        </p>
-        <button className="boton boton-ancho" disabled title="El carrito llegará en una próxima versión">
-          Carrito: próximamente
-        </button>
+          <button className="boton boton-ancho" disabled title="El carrito llegará en una próxima versión">
+            Carrito: próximamente
+          </button>
+
+          <dl className="ficha">
+            <div>
+              <dt>Código</dt>
+              <dd>ASF-{String(producto.id).padStart(4, '0')}</dd>
+            </div>
+            <div>
+              <dt>Categoría</dt>
+              <dd>{NOMBRE_CATEGORIA[producto.categoria]}</dd>
+            </div>
+            <div>
+              <dt>Tallas</dt>
+              <dd>{producto.tallas.length ? producto.tallas.join(' · ') : 'Única'}</dd>
+            </div>
+          </dl>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

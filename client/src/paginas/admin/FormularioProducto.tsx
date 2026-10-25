@@ -1,6 +1,7 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { Link, useNavigate, useParams } from 'react-router';
 import { ErrorApi, api } from '../../api';
+import { ImagenProducto } from '../../componentes/ImagenProducto';
 import { CATEGORIAS, NOMBRE_CATEGORIA, TALLAS, type Categoria, type Talla } from '../../tipos';
 
 interface Campos {
@@ -157,11 +158,24 @@ export function FormularioProducto() {
         {errorDe('tallas')}
       </fieldset>
 
-      <label>
-        URL de la imagen <span className="tenue">(opcional)</span>
-        <input type="url" placeholder="https://…" value={campos.imagenUrl} onChange={(e) => cambiar('imagenUrl', e.target.value)} />
-        {errorDe('imagenUrl')}
-      </label>
+      <div className="campo-imagen">
+        <ImagenProducto
+          key={campos.imagenUrl}
+          producto={{ id: Number(id) || 0, nombre: campos.nombre || 'Producto', imagenUrl: campos.imagenUrl.trim() || null }}
+          className="vista-previa"
+        />
+        <label>
+          Imagen <span className="tenue">(URL https://… o ruta /productos/…; opcional)</span>
+          <input
+            type="text"
+            inputMode="url"
+            placeholder="https://…"
+            value={campos.imagenUrl}
+            onChange={(e) => cambiar('imagenUrl', e.target.value)}
+          />
+          {errorDe('imagenUrl')}
+        </label>
+      </div>
 
       <div className="acciones">
         <button className="boton" disabled={enviando}>

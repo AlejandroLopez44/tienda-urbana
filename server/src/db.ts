@@ -56,29 +56,36 @@ export function sembrarDatos(db: DatabaseSync, admin: DatosAdmin): void {
     );
   }
 
+  // Las imágenes viven en client/public/productos y se sirven como /productos/<archivo>.svg
+  const ejemplos: [string, string, number, string, string[], number, string][] = [
+    ['Hoodie Oversize "Concreto"', 'Algodón pesado de 400 g, capucha doble y corte amplio.', 4500, 'unisex', ['S', 'M', 'L', 'XL'], 20, 'hoodie-concreto'],
+    ['Cargo Pants "Ruta 9"', 'Pantalón cargo color oliva con seis bolsillos y ajuste en el tobillo.', 5200, 'hombre', ['M', 'L', 'XL'], 12, 'cargo-ruta-9'],
+    ['Camiseta Boxy "Neón"', 'Corte cuadrado, cuello grueso y estampado reflectivo en la espalda.', 2200, 'unisex', ['XS', 'S', 'M', 'L', 'XL'], 35, 'camiseta-neon'],
+    ['Bomber "Asfalto"', 'Chaqueta bomber negra con forro naranja y parches bordados.', 8900, 'hombre', ['M', 'L', 'XL', 'XXL'], 6, 'bomber-asfalto'],
+    ['Top Corto "Graffiti"', 'Top de algodón con estampado de graffiti hecho a mano.', 1900, 'mujer', ['XS', 'S', 'M'], 18, 'top-graffiti'],
+    ['Jogger "Skyline"', 'Jogger de felpa con franjas laterales y cintura elástica.', 3800, 'mujer', ['XS', 'S', 'M', 'L'], 15, 'jogger-skyline'],
+    ['Gorra Snapback "Bloque"', 'Visera plana, bordado 3D y cierre ajustable. Talla única.', 1800, 'unisex', [], 40, 'gorra-bloque'],
+    ['Falda Cargo "Metro"', 'Falda midi estilo cargo con bolsillos laterales y cinturón.', 3500, 'mujer', ['S', 'M', 'L'], 9, 'falda-metro'],
+    ['Chaqueta Denim "Underground"', 'Denim lavado en piedra con parches en los codos.', 6900, 'mujer', ['S', 'M', 'L'], 0, 'denim-underground'],
+    ['Short Basketball "Cancha"', 'Short de malla transpirable, largo hasta la rodilla.', 2600, 'hombre', ['S', 'M', 'L', 'XL'], 25, 'short-cancha'],
+  ];
+  const rutaImagen = (archivo: string) => `/productos/${archivo}.svg`;
+
   const { total } = db.prepare('SELECT COUNT(*) AS total FROM productos').get() as { total: number };
-  if (total > 0) return;
+  if (total > 0) {
+    // Base de datos ya existente: solo rellena la imagen de los ejemplos que no tengan una.
+    const ponerImagen = db.prepare('UPDATE productos SET imagen_url = ? WHERE nombre = ? AND imagen_url IS NULL');
+    for (const [nombre, , , , , , archivo] of ejemplos) ponerImagen.run(rutaImagen(archivo), nombre);
+    return;
+  }
 
   const insertar = db.prepare(
-    'INSERT INTO productos (nombre, descripcion, precio_centavos, categoria, tallas, stock) VALUES (?, ?, ?, ?, ?, ?)',
+    'INSERT INTO productos (nombre, descripcion, precio_centavos, categoria, tallas, stock, imagen_url) VALUES (?, ?, ?, ?, ?, ?, ?)',
   );
-  const ejemplos: [string, string, number, string, string[], number][] = [
-    ['Hoodie Oversize "Concreto"', 'Algodón pesado de 400 g, capucha doble y corte amplio.', 4500, 'unisex', ['S', 'M', 'L', 'XL'], 20],
-    ['Cargo Pants "Ruta 9"', 'Pantalón cargo color oliva con seis bolsillos y ajuste en el tobillo.', 5200, 'hombre', ['M', 'L', 'XL'], 12],
-    ['Camiseta Boxy "Neón"', 'Corte cuadrado, cuello grueso y estampado reflectivo en la espalda.', 2200, 'unisex', ['XS', 'S', 'M', 'L', 'XL'], 35],
-    ['Bomber "Asfalto"', 'Chaqueta bomber negra con forro naranja y parches bordados.', 8900, 'hombre', ['M', 'L', 'XL', 'XXL'], 6],
-    ['Top Corto "Graffiti"', 'Top de algodón con estampado de graffiti hecho a mano.', 1900, 'mujer', ['XS', 'S', 'M'], 18],
-    ['Jogger "Skyline"', 'Jogger de felpa con franjas laterales y cintura elástica.', 3800, 'mujer', ['XS', 'S', 'M', 'L'], 15],
-    ['Gorra Snapback "Bloque"', 'Visera plana, bordado 3D y cierre ajustable. Talla única.', 1800, 'unisex', [], 40],
-    ['Falda Cargo "Metro"', 'Falda midi estilo cargo con bolsillos laterales y cinturón.', 3500, 'mujer', ['S', 'M', 'L'], 9],
-    ['Chaqueta Denim "Underground"', 'Denim lavado en piedra con parches en los codos.', 6900, 'mujer', ['S', 'M', 'L'], 0],
-    ['Short Basketball "Cancha"', 'Short de malla transpirable, largo hasta la rodilla.', 2600, 'hombre', ['S', 'M', 'L', 'XL'], 25],
-  ];
-
   db.exec('BEGIN');
   try {
-    for (const [nombre, descripcion, precio, categoria, tallas, stock] of ejemplos) {
-      insertar.run(nombre, descripcion, precio, categoria, JSON.stringify(tallas), stock);
+    for (const [nombre, descripcion, precio, categoria, tallas, stock, archivo] of ejemplos) {
+      insertar.run(nombre, descripcion, precio, categoria, JSON.stringify(tallas), stock, rutaImagen(archivo));
     }
     db.exec('COMMIT');
   } catch (error) {
